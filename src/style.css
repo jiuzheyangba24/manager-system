@@ -5,31 +5,181 @@
 :root {
   --nav-height: 60px;
   --bottom-nav-height: 70px;
+  /* 品牌色彩变量 */
+  --color-brand: #F97316;
+  --color-brand-light: #FDBA74;
+  --color-brand-dark: #EA580C;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 font-sans antialiased;
+  @apply bg-gray-50 text-gray-900 antialiased;
+  font-family: 'Outfit', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-image:
+    radial-gradient(at 40% 20%, rgba(251, 146, 60, 0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(14, 165, 233, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 80%, rgba(249, 115, 22, 0.06) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
-/* Glassmorphism Utilities */
+/* ========== Glassmorphism 毛玻璃效果 ========== */
 .glass {
-  @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-card;
+  @apply bg-white/80 backdrop-blur-xl border border-white/50;
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.glass-warm {
+  @apply backdrop-blur-xl border border-primary-200/30;
+  background: linear-gradient(135deg, rgba(255, 247, 237, 0.9) 0%, rgba(255, 255, 255, 0.85) 100%);
+  box-shadow:
+    0 8px 32px rgba(249, 115, 22, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .glass-dark {
-  @apply bg-gray-900/70 backdrop-blur-md border border-white/10 shadow-card text-white;
+  @apply bg-gray-900/80 backdrop-blur-xl border border-white/10 text-white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Micro-interactions */
-.btn-click {
-  @apply active:scale-95 transition-transform duration-100;
+/* ========== 卡片样式 ========== */
+.card-premium {
+  @apply bg-white/90 backdrop-blur-sm rounded-3xl border border-gray-100/80;
+  box-shadow:
+    0 4px 24px -4px rgba(0, 0, 0, 0.06),
+    0 2px 8px -2px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.card-premium:hover {
+  box-shadow:
+    0 20px 50px -12px rgba(249, 115, 22, 0.15),
+    0 8px 20px -8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transform: translateY(-4px);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+/* ========== 渐变文字 ========== */
+.text-gradient-warm {
+  background: linear-gradient(135deg, #EA580C 0%, #F97316 50%, #FB923C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-ocean {
+  background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 50%, #38BDF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== 按钮样式 ========== */
+.btn-primary {
+  @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-2xl;
+  @apply shadow-lg shadow-primary-500/30;
+  @apply transition-all duration-300;
+  @apply hover:shadow-xl hover:shadow-primary-500/40 hover:-translate-y-0.5;
+  @apply active:scale-95;
+}
+
+.btn-ghost {
+  @apply bg-white/60 backdrop-blur-sm text-gray-700 font-medium rounded-2xl border border-gray-200/60;
+  @apply transition-all duration-300;
+  @apply hover:bg-white hover:border-primary-200 hover:text-primary-600;
+}
+
+/* ========== 微交互 ========== */
 .hover-lift {
-  @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-hover;
+  @apply transition-all duration-300;
 }
 
-/* Scrollbar */
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.2);
+}
+
+.hover-glow {
+  @apply transition-all duration-300;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.25);
+}
+
+/* ========== 动画 ========== */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========== 延迟类 ========== */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* ========== 滚动条美化 ========== */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -40,17 +190,18 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  @apply bg-primary-200 rounded-full;
+  transition: background 0.3s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  @apply bg-primary-400;
 }
 
-/* Animations */
+/* ========== Vue 过渡 ========== */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,
@@ -60,15 +211,39 @@ body {
 
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-up-enter-from {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(30px);
 }
 
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-20px);
+}
+
+/* ========== 发光边框效果 ========== */
+.border-glow {
+  position: relative;
+}
+
+.border-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, #F97316, #FB923C, #FDBA74);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.border-glow:hover::before {
+  opacity: 1;
 }
