@@ -1,0 +1,492 @@
+/* ========================================
+   经理系统 - 主样式文件
+   ======================================== */
+
+/* 导入变量和组件 */
+@import url('variables.css');
+@import url('components.css');
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ========== 重置样式 ========== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family), var(--font-family-cn);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ========== 布局容器 ========== */
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg-secondary);
+    position: relative;
+    padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-4));
+}
+
+.page-content {
+    padding: var(--spacing-4);
+}
+
+/* ========== 顶部导航 ========== */
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-4);
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--gradient-purple);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.logo-text {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+.logo-text span {
+    color: var(--primary-500);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.notification-btn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: var(--gray-100);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.notification-btn:hover {
+    background: var(--primary-100);
+    color: var(--primary-600);
+}
+
+.notification-btn .badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: var(--danger-500);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-primary);
+}
+
+/* ========== 搜索栏 ========== */
+.search-bar {
+    padding: 0 var(--spacing-4) var(--spacing-4);
+    background: var(--bg-primary);
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    background: var(--gray-50);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-3) var(--spacing-4);
+    transition: all var(--transition-fast);
+}
+
+.search-container:focus-within {
+    background: var(--bg-card);
+    box-shadow: 0 0 0 2px var(--primary-200);
+}
+
+.search-container .search-icon {
+    color: var(--gray-400);
+    font-size: 1.25rem;
+}
+
+.search-container input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.search-container input::placeholder {
+    color: var(--gray-400);
+}
+
+/* ========== 欢迎区域 ========== */
+.welcome-section {
+    padding: var(--spacing-4);
+    background: var(--bg-primary);
+    margin-bottom: var(--spacing-4);
+}
+
+.greeting {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.greeting .wave {
+    display: inline-block;
+    animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(20deg);
+    }
+
+    75% {
+        transform: rotate(-10deg);
+    }
+}
+
+.welcome-subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.welcome-subtitle .highlight {
+    color: var(--primary-500);
+    font-weight: var(--font-semibold);
+}
+
+/* ========== 统计卡片区域 ========== */
+.stats-section {
+    padding: 0 var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-3);
+}
+
+.stats-grid .stat-card {
+    padding: var(--spacing-4);
+}
+
+.stats-grid .stat-card .icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+}
+
+.stats-grid .stat-card .value {
+    font-size: var(--text-2xl);
+}
+
+/* ========== 预警和最近合同区域 ========== */
+.main-content {
+    padding: 0 var(--spacing-4);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ========== 最近合同区域 ========== */
+.recent-contracts {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-5);
+    box-shadow: var(--shadow-card);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-4);
+}
+
+.section-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.section-link {
+    font-size: var(--text-sm);
+    color: var(--primary-500);
+    font-weight: var(--font-medium);
+    transition: color var(--transition-fast);
+}
+
+.section-link:hover {
+    color: var(--primary-700);
+}
+
+.contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+/* ========== 快捷操作栏 ========== */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    margin: var(--spacing-4) 0;
+}
+
+.quick-action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.quick-action-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.quick-action-item .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.quick-action-item .label {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+}
+
+/* ========== 页面过渡动画 ========== */
+.page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all var(--transition-base);
+}
+
+.page-exit {
+    opacity: 1;
+}
+
+.page-exit-active {
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+/* ========== 淡入动画 ========== */
+.fade-in {
+    animation: fadeIn var(--transition-base) ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 延迟动画类 */
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
+
+.delay-4 {
+    animation-delay: 0.4s;
+}
+
+.delay-5 {
+    animation-delay: 0.5s;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 375px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2);
+    }
+
+    .stats-grid .stat-card {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--spacing-3);
+    }
+
+    .stats-grid .stat-card .icon {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-container {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stats-grid {
+        max-width: 800px;
+    }
+}
+
+/* ========== 滚动条美化 ========== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}
+
+/* ========== 选中文本样式 ========== */
+::selection {
+    background: var(--primary-200);
+    color: var(--primary-900);
+}
+
+/* ========== 焦点环样式 ========== */
+:focus-visible {
+    outline: 2px solid var(--primary-400);
+    outline-offset: 2px;
+}
+
+/* ========== 禁用状态 ========== */
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ========== 隐藏类 ========== */
+.hidden {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

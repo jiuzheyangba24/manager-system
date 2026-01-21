@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="经理系统 - 合同库管理">
+    <title>合同库 - 经理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+    <style>
+        /* 合同库页面特定样式 */
+        .page-header {
+            padding: var(--spacing-4);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+        }
+
+        .page-title {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-2);
+        }
+
+        .page-subtitle {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: var(--spacing-2);
+            padding: var(--spacing-4);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-tab {
+            padding: var(--spacing-2) var(--spacing-4);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+        }
+
+        .filter-tab:hover {
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .filter-tab.active {
+            background: var(--primary-500);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .contracts-container {
+            padding: 0 var(--spacing-4) var(--spacing-4);
+        }
+
+        .contract-group {
+            margin-bottom: var(--spacing-6);
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-3);
+        }
+
+        .group-title {
+            font-size: var(--text-sm);
+            font-weight: var(--font-semibold);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .group-count {
+            font-size: var(--text-xs);
+            color: var(--gray-400);
+        }
+
+        .contract-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-3);
+        }
+
+        .contract-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-4);
+            box-shadow: var(--shadow-card);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .contract-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-200);
+        }
+
+        .contract-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-3);
+        }
+
+        .contract-type-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .contract-card .status {
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: var(--font-medium);
+        }
+
+        .contract-card .status.pending {
+            background: var(--warning-100);
+            color: var(--warning-700);
+        }
+
+        .contract-card .status.completed {
+            background: var(--success-100);
+            color: var(--success-700);
+        }
+
+        .contract-card .status.draft {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .contract-card .status.rejected {
+            background: var(--danger-100);
+            color: var(--danger-700);
+        }
+
+        .contract-card-title {
+            font-size: var(--text-base);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-2);
+        }
+
+        .contract-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-3);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-1);
+        }
+
+        .contract-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--spacing-3);
+            padding-top: var(--spacing-3);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .participants {
+            display: flex;
+            align-items: center;
+        }
+
+        .participant-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-full);
+            border: 2px solid var(--bg-card);
+            margin-left: -8px;
+            background: var(--gradient-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: var(--font-semibold);
+        }
+
+        .participant-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .participant-count {
+            margin-left: var(--spacing-2);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
+        }
+
+        .contract-amount {
+            font-size: var(--text-sm);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+        }
+
+        .fab {
+            position: fixed;
+            bottom: calc(var(--bottom-nav-height) + 20px);
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-purple);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            z-index: var(--z-fixed);
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .search-filter-bar {
+            display: flex;
+            gap: var(--spacing-2);
+            padding: 0 var(--spacing-4);
+            margin-bottom: var(--spacing-3);
+        }
+
+        .search-filter-bar .search-container {
+            flex: 1;
+        }
+
+        .filter-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-300);
+            background: var(--primary-50);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 页面头部 -->
+        <header class="page-header">
+            <h1 class="page-title">合同库</h1>
+            <p class="page-subtitle">共 <span id="total-count">47</span> 份合同</p>
+        </header>
+
+        <!-- 搜索和筛选 -->
+        <div class="search-filter-bar">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="搜索合同..." id="searchInput">
+            </div>
+            <button class="filter-btn" id="filterBtn">🔧</button>
+        </div>
+
+        <!-- 筛选标签 -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">全部</button>
+            <button class="filter-tab" data-filter="pending">待签署</button>
+            <button class="filter-tab" data-filter="processing">进行中</button>
+            <button class="filter-tab" data-filter="completed">已完成</button>
+            <button class="filter-tab" data-filter="draft">草稿</button>
+            <button class="filter-tab" data-filter="rejected">已拒绝</button>
+        </div>
+
+        <!-- 合同列表 -->
+        <div class="contracts-container">
+            <!-- 今天 -->
+            <div class="contract-group fade-in">
+                <div class="group-header">
+                    <span class="group-title">今天</span>
+                    <span class="group-count">3 份合同</span>
+                </div>
+                <div class="contract-list">
+                    <div class="contract-card">
+                        <div class="contract-card-header">
+                            <div class="contract-type-icon"
+                                style="background: var(--primary-100); color: var(--primary-600);">📋</div>
+                            <span class="status pending">待签署</span>
+                        </div>
+                        <h3 class="contract-card-title">2024年度市场推广合作协议</h3>
+                        <div class="contract-card-meta">
+                            <span class="meta-item">📅 2024-12-31 到期</span>
+                            <span class="meta-item">🏢 腾讯科技</span>
+                        </div>
+                        <div class="contract-card-footer">
+                            <div class="participants">
+                                <div class="participant-avatar">张</div>
+                                <div class="participant-avatar">李</div>
+                                <div class="participant-avatar">王</div>
+                                <span class="participant-count">+2</span>
+                            </div>
+                            <span class="contract-amount">¥ 280,000</span>
+                        </div>
+                    </div>
+
+                    <div class="contract-card">
+                        <div class="contract-card-header">
+                            <div class="contract-type-icon"
+                                style="background: var(--success-100); color: var(--success-600);">🔒</div>
+                            <span class="status completed">已完成</span>
+                        </div>
+                        <h3 class="contract-card-title">技术保密协议 (NDA)</h3>
+                        <div class="contract-card-meta">
+                            <span class="meta-item">📅 长期有效</span>
+                            <span class="meta-item">👤 王明</span>
+                        </div>
+                        <div class="contract-card-footer">
+                            <div class="participants">
+                                <div class="participant-avatar">张</div>
+                                <div class="participant-avatar">王</div>
+                            </div>
+                            <span class="contract-amount">-</span>
+                        </div>
+                    </div>
+
+                    <div class="contract-card">
+                        <div class="contract-card-header">
+                            <div class="contract-type-icon"
+                                style="background: var(--warning-100); color: var(--warning-600);">🤝</div>
+                            <span class="status pending">待签署</span>
+                        </div>
+                        <h3 class="contract-card-title">云服务器租赁合同</h3>
+                        <div class="contract-card-meta">
+                            <span class="meta-item">📅 2025-06-30 到期</span>
+                            <span class="meta-item">🏢 阿里云</span>
+                        </div>
+                        <div class="contract-card-footer">
+                            <div class="participants">
+                                <div class="participant-avatar">张</div>
+                                <div class="participant-avatar">赵</div>
+                            </div>
+                            <span class="contract-amount">¥ 156,000/年</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 本周 -->
+            <div class="contract-group fade-in delay-1">
+                <div class="group-header">
+                    <span class="group-title">本周</span>
+                    <span class="group-count">5 份合同</span>
+                </div>
+                <div class="contract-list">
+                    <div class="contract-card">
+                        <div class="contract-card-header">
+                            <div class="contract-type-icon"
+                                style="background: var(--gray-100); color: var(--gray-600);">📄</div>
+                            <span class="status draft">草稿</span>
+                        </div>
+                        <h3 class="contract-card-title">年度办公设备采购合同</h3>
+                        <div class="contract-card-meta">
+                            <span class="meta-item">📅 待确定</span>
+                            <span class="meta-item">🏢 联想集团</span>
+                        </div>
+                        <div class="contract-card-footer">
+                            <div class="participants">
+                                <div class="participant-avatar">张</div>
+                            </div>
+                            <span class="contract-amount">¥ 89,000</span>
+                        </div>
+                    </div>
+
+                    <div class="contract-card">
+                        <div class="contract-card-header">
+                            <div class="contract-type-icon"
+                                style="background: var(--danger-100); color: var(--danger-600);">⚠️</div>
+                            <span class="status rejected">已拒绝</span>
+                        </div>
+                        <h3 class="contract-card-title">软件定制开发协议</h3>
+                        <div class="contract-card-meta">
+                            <span class="meta-item">📅 已终止</span>
+                            <span class="meta-item">🏢 某科技公司</span>
+                        </div>
+                        <div class="contract-card-footer">
+                            <div class="participants">
+                                <div class="participant-avatar">张</div>
+                                <div class="participant-avatar">刘</div>
+                            </div>
+                            <span class="contract-amount">¥ 450,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 浮动添加按钮 -->
+        <button class="fab" onclick="location.href='create.html'">➕</button>
+
+        <!-- 底部导航栏 -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <span class="icon">🏠</span>
+                <span class="label">首页</span>
+            </a>
+            <a href="contracts.html" class="nav-item active">
+                <span class="icon">📁</span>
+                <span class="label">合同库</span>
+            </a>
+            <a href="create.html" class="nav-item create-btn">
+                <div class="icon-wrapper">
+                    <span class="icon">➕</span>
+                </div>
+                <span class="label">快速发起</span>
+            </a>
+            <a href="statistics.html" class="nav-item">
+                <span class="icon">📊</span>
+                <span class="label">统计</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="icon">👤</span>
+                <span class="label">我的</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // 筛选标签切换
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+                app.showToast(`筛选: ${this.textContent}`);
+            });
+        });
+
+        // 合同卡片点击
+        document.querySelectorAll('.contract-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const title = this.querySelector('.contract-card-title').textContent;
+                app.showToast(`打开: ${title}`);
+            });
+        });
+
+        // 筛选按钮
+        document.getElementById('filterBtn').addEventListener('click', function () {
+            app.showToast('打开高级筛选');
+        });
+    </script>
+</body>
+
+</html>

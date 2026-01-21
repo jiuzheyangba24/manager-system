@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计 - 经理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-header {
+            padding: var(--spacing-4);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .stats-container {
+            padding: var(--spacing-4);
+        }
+
+        .time-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: var(--spacing-4);
+            background: var(--gray-100);
+            padding: 4px;
+            border-radius: 1rem;
+        }
+
+        .time-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .time-tab.active {
+            background: white;
+            color: var(--primary-600);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .overview-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: var(--spacing-6);
+        }
+
+        .overview-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: var(--spacing-4);
+            box-shadow: var(--shadow-card);
+        }
+
+        .overview-card .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .overview-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .overview-card .trend {
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .overview-card .trend.up {
+            color: var(--success-600);
+        }
+
+        .overview-card .trend.down {
+            color: var(--danger-600);
+        }
+
+        .chart-section {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: var(--spacing-5);
+            margin-bottom: var(--spacing-4);
+            box-shadow: var(--shadow-card);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-4);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-600);
+            font-size: 1rem;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 160px;
+            padding: 20px 10px 0;
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 32px;
+            border-radius: 4px 4px 0 0;
+            background: var(--gradient-purple);
+            transition: height 0.5s ease;
+        }
+
+        .bar-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .bar-value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .ranking-section {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: var(--spacing-5);
+            margin-bottom: var(--spacing-4);
+            box-shadow: var(--shadow-card);
+        }
+
+        .ranking-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-4);
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+        }
+
+        .rank-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+            color: white;
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: white;
+        }
+
+        .rank-other {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .ranking-item .info {
+            flex: 1;
+        }
+
+        .ranking-item .name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .ranking-item .count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .ranking-item .amount {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-600);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="page-header">
+            <h1 class="page-title">数据统计</h1>
+            <p class="page-subtitle">合同签署数据一览</p>
+        </header>
+        <div class="stats-container">
+            <div class="time-tabs">
+                <button class="time-tab">本周</button>
+                <button class="time-tab active">本月</button>
+                <button class="time-tab">本季度</button>
+                <button class="time-tab">本年</button>
+            </div>
+            <div class="overview-cards">
+                <div class="overview-card">
+                    <div class="label">签署总数</div>
+                    <div class="value">128</div>
+                    <div class="trend up">↑ 12% 较上月</div>
+                </div>
+                <div class="overview-card">
+                    <div class="label">合同金额</div>
+                    <div class="value">¥2.8M</div>
+                    <div class="trend up">↑ 8% 较上月</div>
+                </div>
+                <div class="overview-card">
+                    <div class="label">平均签署时长</div>
+                    <div class="value">2.3天</div>
+                    <div class="trend up">↓ 15% 较上月</div>
+                </div>
+                <div class="overview-card">
+                    <div class="label">待处理</div>
+                    <div class="value">16</div>
+                    <div class="trend down">↑ 3 份新增</div>
+                </div>
+            </div>
+            <div class="chart-section">
+                <h3 class="chart-title">📊 签署趋势</h3>
+                <div class="bar-chart">
+                    <div class="bar-item"><span class="bar-value">18</span>
+                        <div class="bar" style="height:60px"></div><span class="bar-label">周一</span>
+                    </div>
+                    <div class="bar-item"><span class="bar-value">25</span>
+                        <div class="bar" style="height:85px"></div><span class="bar-label">周二</span>
+                    </div>
+                    <div class="bar-item"><span class="bar-value">32</span>
+                        <div class="bar" style="height:110px"></div><span class="bar-label">周三</span>
+                    </div>
+                    <div class="bar-item"><span class="bar-value">28</span>
+                        <div class="bar" style="height:95px"></div><span class="bar-label">周四</span>
+                    </div>
+                    <div class="bar-item"><span class="bar-value">22</span>
+                        <div class="bar" style="height:75px"></div><span class="bar-label">周五</span>
+                    </div>
+                    <div class="bar-item"><span class="bar-value">8</span>
+                        <div class="bar" style="height:30px;opacity:0.6"></div><span class="bar-label">周六</span>
+                    </div>
+                    <div class="bar-item"><span class="bar-value">5</span>
+                        <div class="bar" style="height:20px;opacity:0.6"></div><span class="bar-label">周日</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ranking-section">
+                <h3 class="ranking-title">🏆 签署排行</h3>
+                <div class="ranking-list">
+                    <div class="ranking-item">
+                        <div class="rank-badge rank-1">1</div>
+                        <div class="info">
+                            <div class="name">张经理</div>
+                            <div class="count">完成 45 份</div>
+                        </div>
+                        <div class="amount">¥1.2M</div>
+                    </div>
+                    <div class="ranking-item">
+                        <div class="rank-badge rank-2">2</div>
+                        <div class="info">
+                            <div class="name">李总监</div>
+                            <div class="count">完成 38 份</div>
+                        </div>
+                        <div class="amount">¥980K</div>
+                    </div>
+                    <div class="ranking-item">
+                        <div class="rank-badge rank-3">3</div>
+                        <div class="info">
+                            <div class="name">王主管</div>
+                            <div class="count">完成 32 份</div>
+                        </div>
+                        <div class="amount">¥650K</div>
+                    </div>
+                    <div class="ranking-item">
+                        <div class="rank-badge rank-other">4</div>
+                        <div class="info">
+                            <div class="name">赵专员</div>
+                            <div class="count">完成 25 份</div>
+                        </div>
+                        <div class="amount">¥420K</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item"><span class="icon">🏠</span><span class="label">首页</span></a>
+            <a href="contracts.html" class="nav-item"><span class="icon">📁</span><span class="label">合同库</span></a>
+            <a href="create.html" class="nav-item create-btn">
+                <div class="icon-wrapper"><span class="icon">➕</span></div><span class="label">快速发起</span>
+            </a>
+            <a href="statistics.html" class="nav-item active"><span class="icon">📊</span><span
+                    class="label">统计</span></a>
+            <a href="profile.html" class="nav-item"><span class="icon">👤</span><span class="label">我的</span></a>
+        </nav>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        document.querySelectorAll('.time-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.time-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

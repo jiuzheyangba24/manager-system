@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快速发起 - 经理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-header {
+            padding: var(--spacing-4);
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .create-container {
+            padding: var(--spacing-4);
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-4);
+        }
+
+        .contract-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .type-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: var(--spacing-5);
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.25s;
+            box-shadow: var(--shadow-card);
+        }
+
+        .type-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .type-card.selected {
+            border-color: var(--primary-500);
+            background: var(--primary-50);
+        }
+
+        .type-card .icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto var(--spacing-3);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .type-card .name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .type-card .desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .form-section {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: var(--spacing-5);
+            margin-bottom: var(--spacing-4);
+            box-shadow: var(--shadow-card);
+        }
+
+        .form-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-4);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: var(--danger-500);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            background: var(--bg-secondary);
+            transition: all 0.15s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px var(--primary-100);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .signer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .signer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+        }
+
+        .signer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .signer-info {
+            flex: 1;
+        }
+
+        .signer-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .signer-role {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .add-signer-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border: 2px dashed var(--border-color);
+            border-radius: 0.75rem;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.15s;
+        }
+
+        .add-signer-btn:hover {
+            border-color: var(--primary-400);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-400);
+            background: var(--primary-50);
+        }
+
+        .upload-area .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .upload-area .title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .upload-area .hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .submit-section {
+            padding: var(--spacing-4);
+            padding-bottom: calc(70px + var(--spacing-4));
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 1rem;
+            background: var(--gradient-purple);
+            color: white;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            box-shadow: none;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="page-header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <h1 class="page-title">快速发起合同</h1>
+        </header>
+        <div class="create-container">
+            <h2 class="section-title">选择合同类型</h2>
+            <div class="contract-types">
+                <div class="type-card selected" data-type="purchase">
+                    <div class="icon" style="background:var(--primary-100)">📋</div>
+                    <div class="name">采购合同</div>
+                    <div class="desc">货物或服务采购</div>
+                </div>
+                <div class="type-card" data-type="sales">
+                    <div class="icon" style="background:var(--success-100)">💰</div>
+                    <div class="name">销售合同</div>
+                    <div class="desc">产品或服务销售</div>
+                </div>
+                <div class="type-card" data-type="nda">
+                    <div class="icon" style="background:var(--warning-100)">🔒</div>
+                    <div class="name">保密协议</div>
+                    <div class="desc">NDA 保密协议</div>
+                </div>
+                <div class="type-card" data-type="service">
+                    <div class="icon" style="background:var(--danger-100)">🤝</div>
+                    <div class="name">服务合同</div>
+                    <div class="desc">服务类合同</div>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3 class="form-title">📝 基本信息</h3>
+                <div class="form-group"><label class="form-label">合同名称 <span class="required">*</span></label><input
+                        type="text" class="form-input" placeholder="请输入合同名称" id="contractName"></div>
+                <div class="form-group"><label class="form-label">对方公司 <span class="required">*</span></label><input
+                        type="text" class="form-input" placeholder="请输入对方公司名称" id="partyName"></div>
+                <div class="form-group"><label class="form-label">合同金额</label><input type="text" class="form-input"
+                        placeholder="请输入合同金额（可选）" id="amount"></div>
+                <div class="form-group"><label class="form-label">合同说明</label><textarea class="form-input form-textarea"
+                        placeholder="请输入合同说明..." id="description"></textarea></div>
+            </div>
+            <div class="form-section">
+                <h3 class="form-title">👥 签署人</h3>
+                <div class="signer-list">
+                    <div class="signer-item">
+                        <div class="signer-avatar">张</div>
+                        <div class="signer-info">
+                            <div class="signer-name">张经理（我）</div>
+                            <div class="signer-role">发起人</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-signer-btn">➕ 添加签署人</button>
+            </div>
+            <div class="form-section">
+                <h3 class="form-title">📎 上传文件</h3>
+                <div class="upload-area">
+                    <div class="icon">📤</div>
+                    <div class="title">点击上传合同文件</div>
+                    <div class="hint">支持 PDF、Word、图片</div>
+                </div>
+            </div>
+        </div>
+        <div class="submit-section">
+            <button class="submit-btn">发起签署</button>
+            <button class="submit-btn btn-secondary">保存草稿</button>
+        </div>
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item"><span class="icon">🏠</span><span class="label">首页</span></a>
+            <a href="contracts.html" class="nav-item"><span class="icon">📁</span><span class="label">合同库</span></a>
+            <a href="create.html" class="nav-item create-btn active">
+                <div class="icon-wrapper"><span class="icon">➕</span></div><span class="label">快速发起</span>
+            </a>
+            <a href="statistics.html" class="nav-item"><span class="icon">📊</span><span class="label">统计</span></a>
+            <a href="profile.html" class="nav-item"><span class="icon">👤</span><span class="label">我的</span></a>
+        </nav>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+        document.querySelectorAll('.type-card').forEach(card => {
+            card.addEventListener('click', function () {
+                document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+
+</html>

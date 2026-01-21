@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="经理系统 - 智能合同签署管理平台">
+  <title>经理系统 - 首页</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <!-- 顶部导航栏 -->
+    <header class="top-header">
+      <div class="logo">
+        <div class="logo-icon">📄</div>
+        <div class="logo-text">NexSign <span>Pro</span></div>
+      </div>
+      <div class="header-actions">
+        <button class="notification-btn" id="notificationBtn" aria-label="通知">
+          🔔
+          <span class="badge"></span>
+        </button>
+        <div class="avatar" id="userAvatar">张</div>
+      </div>
+    </header>
+
+    <!-- 搜索栏 -->
+    <div class="search-bar">
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="搜索合同名称、对方公司..." id="searchInput">
+      </div>
+    </div>
+
+    <!-- 欢迎区域 -->
+    <section class="welcome-section fade-in">
+      <h1 class="greeting">
+        <span id="greeting-text">下午好</span>，<span id="user-name">张经理</span> <span class="wave">👋</span>
+      </h1>
+      <p class="welcome-subtitle">
+        今天有 <span class="highlight" id="pending-count">4</span> 份合同需要您签署，整体进度良好。
+      </p>
+    </section>
+
+    <!-- 统计卡片 -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card fade-in delay-1" id="pendingCard">
+          <div class="icon primary">📝</div>
+          <span class="label">待我签署</span>
+          <div class="value">
+            <span id="pending-sign">04</span>
+            <span class="badge urgent">急需处理</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in delay-2" id="waitingCard">
+          <div class="icon warning">👥</div>
+          <span class="label">等待他人签署</span>
+          <div class="value">
+            <span id="waiting-others">12</span>
+            <span class="badge" style="background: var(--gray-100); color: var(--gray-600);">进行中</span>
+          </div>
+        </div>
+        
+        <div class="stat-card fade-in delay-3" id="completedCard">
+          <div class="icon success">✅</div>
+          <span class="label">本月已完成</span>
+          <div class="value">
+            <span id="completed-count">128</span>
+            <span class="badge trend-up">+12%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+      <!-- 合同到期预警 -->
+      <div class="warning-card fade-in delay-4">
+        <div class="header">
+          <h2 class="title">合同到期预警</h2>
+          <span class="count-badge" id="warning-count">3条</span>
+        </div>
+        <div class="warning-list" id="warningList">
+          <div class="warning-item">
+            <span class="days-badge urgent">3d</span>
+            <div class="content">
+              <div class="contract-name">2024年度设备租赁协议</div>
+              <div class="company-name">对方：顺丰速运有限公司</div>
+            </div>
+          </div>
+          <div class="warning-item">
+            <span class="days-badge warning">7d</span>
+            <div class="content">
+              <div class="contract-name">高级云服务框架合同</div>
+              <div class="company-name">对方：阿里云计算有限公司</div>
+            </div>
+          </div>
+          <div class="warning-item">
+            <span class="days-badge warning">7d</span>
+            <div class="content">
+              <div class="contract-name">办公场地续租协议</div>
+              <div class="company-name">对方：万科物业管理公司</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 最近合同 -->
+      <div class="recent-contracts fade-in delay-5">
+        <div class="section-header">
+          <h2 class="section-title">最近合同</h2>
+          <a href="contracts.html" class="section-link">查看全部 →</a>
+        </div>
+        <div class="contracts-list" id="contractsList">
+          <div class="contract-item">
+            <div class="icon-wrapper type-purchase">📋</div>
+            <div class="info">
+              <div class="title">市场推广采购协议 - 2024Q3</div>
+              <div class="meta">更新于 2 小时前 · 投资平节能出品公司</div>
+            </div>
+            <span class="status pending">⏳ 待签署</span>
+          </div>
+          <div class="contract-item">
+            <div class="icon-wrapper type-nda">🔒</div>
+            <div class="info">
+              <div class="title">核心技术人员NDA保密协议</div>
+              <div class="meta">更新于 5 小时前 · 王明</div>
+            </div>
+            <span class="status completed">✓ 已完成</span>
+          </div>
+          <div class="contract-item">
+            <div class="icon-wrapper type-service">🤝</div>
+            <div class="info">
+              <div class="title">年度IT运维服务合同</div>
+              <div class="meta">更新于 1 天前 · 华为技术有限公司</div>
+            </div>
+            <span class="status pending">⏳ 待签署</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item active">
+        <span class="icon">🏠</span>
+        <span class="label">首页</span>
+      </a>
+      <a href="contracts.html" class="nav-item">
+        <span class="icon">📁</span>
+        <span class="label">合同库</span>
+      </a>
+      <a href="create.html" class="nav-item create-btn">
+        <div class="icon-wrapper">
+          <span class="icon">➕</span>
+        </div>
+        <span class="label">快速发起</span>
+      </a>
+      <a href="statistics.html" class="nav-item">
+        <span class="icon">📊</span>
+        <span class="label">统计</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <span class="icon">👤</span>
+        <span class="label">我的</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
